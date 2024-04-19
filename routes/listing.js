@@ -45,6 +45,10 @@ router
         wrapAsync(lisitngController.destroyListing)
     );
 
+router
+    .route("/sort/:category")
+    .get(wrapAsync(lisitngController.sortByCategory));
+
 
 
 

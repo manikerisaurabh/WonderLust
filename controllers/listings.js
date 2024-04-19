@@ -83,3 +83,23 @@ module.exports.destroyListing = async (req, res) => {
     req.flash("success", "listing deleted");
     res.redirect("/listings");
 };
+
+module.exports.sortByCategory = async (req, res) => {
+    try {
+        const { category } = req.params;
+        const allListings = await Listing.find({ category: { $in: [category] } });
+
+        if (allListings.length === 0) {
+            //return res.status(404).json({ message: 'No listings found for this category.' });
+            req.flash("error", `No listings found for ${category}.`);
+            res.redirect("/listings");
+        }
+
+        //res.status(200).json({ listings });
+        res.render("listings/index.ejs", { allListings });
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+};
